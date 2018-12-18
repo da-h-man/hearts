@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 public class HeartCore extends Application {
 	
 	Game game;
+	Thread backgroundThread;
 	Screen screen;
 	
 	public static void main(String[] args) {
@@ -37,8 +38,20 @@ public class HeartCore extends Application {
 	public void start(final Stage primaryStage) {
 		
 		this.game = new Game("Joe", "Billy", "Suzanne", "You");
+		Runnable task = new Runnable() {
+			public void run() {
+				game.startNewGame();
+			}
+		};
+        // Run the task in a background thread
+		this.backgroundThread = new Thread(task);
+		// Terminate the running thread if the application exits
+		// wieso? der thread hört doch eh auf.
+		this.backgroundThread.setDaemon(false);
+		// Start the thread
 		//check for probabilities file
 		
+        /*
         File f1 = new File(Constants.AVG_TRICKS_FILE);
         File f2 = new File(Constants.ALL_CARDS_FILE);
         File f3 = new File(Constants.HAS_SUIT_FILE);
@@ -48,9 +61,10 @@ public class HeartCore extends Application {
         	newFile.createFiles();
         	//runTest(game);
         }
+        */
 		
         System.out.println("Let's get ready.");
-        this.screen = new Screen(game.getDeck(), game);
+        this.screen = new Screen(game.getDeck(), game, backgroundThread);
 		Scene window = new Scene(screen, 700, 700);
         primaryStage.setTitle("Hearts by The Henque");
         primaryStage.setScene(window);
@@ -59,22 +73,13 @@ public class HeartCore extends Application {
         primaryStage.show();
 		
 		this.game.setScreen(this.screen);
-		startGame(game);
+		startGame();
 		
 	}
 	
-	private void startGame(Game theGame) {
-		Runnable task = new Runnable() {
-			public void run() {
-				theGame.play();
-			}
-		};
-        // Run the task in a background thread
-		Thread backgroundThread = new Thread(task);
-		// Terminate the running thread if the application exits
-		backgroundThread.setDaemon(true);
-		// Start the thread
-		 backgroundThread.start();
+	private void startGame() {
+		
+		 this.backgroundThread.start();
 	}
 	
 	private static void runTest(Game game) {
@@ -110,6 +115,8 @@ class FileCreator {
 			}
 			return result;
 		}
+		
+		/*
 		
 		public void createFiles() {
 			
@@ -526,6 +533,7 @@ class FileCreator {
 					System.exit(0);
 				}
 		}
+		*/
 	}
 
 

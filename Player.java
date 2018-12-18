@@ -8,6 +8,7 @@ public class Player  {
 	private int roundScore;
 	private boolean human;
 	private int playerNumber;
+	private Hand tradeCards;
 	
 	public Player(String playerName, boolean h, int num) {
 		this.name=playerName;
@@ -25,6 +26,7 @@ public class Player  {
 			this.hand.getCard(i).setOwner(this.playerNumber);
 			this.hand.getCard(i).setPosition(i);
 		}
+		this.tradeCards = new Hand();
 	}
 	
 	public String getName() {
@@ -65,6 +67,36 @@ public class Player  {
 	
 	public boolean isHuman() {
 		return this.human;
+	}
+
+	public int getNoOfTradeCards() {
+		return this.tradeCards.size();
+	}
+
+	public boolean addTradeCard(int suit, int rank) {
+		
+		return this.addTradeCard(this.getHand().getCard(suit, rank));
+
+	}
+	
+	public boolean addTradeCard(Card tradeCard) {
+		
+		if (tradeCard == null) System.err.println("Good lord - selected a trade card that doesn't exist!!");
+		if (!this.tradeCards.hasCard(tradeCard)) {
+			this.tradeCards.add(tradeCard);
+			return true;
+		} else {
+			this.tradeCards.remove(tradeCard);
+			return false;
+		}
+	}
+	
+	public void resetTradeCards() {
+		this.tradeCards.removeAll();
+	}
+	
+	public Hand getTradeCards() {
+		return this.tradeCards;
 	}
 	
 }

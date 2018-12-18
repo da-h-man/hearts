@@ -19,6 +19,7 @@ public class Card implements Comparable {
 	private volatile int owner;
 	private volatile int position;
 	private int originalPosition;
+	private boolean selectedForTrade;
 	
 	private volatile Image img;
 	
@@ -34,25 +35,28 @@ public class Card implements Comparable {
 		this.owner = 0;
 		this.position = 0;
 		this.originalPosition = 0;
-		if (theSuit==Constants.hearts) {
+		this.selectedForTrade = false;
+		if (theSuit==Constants.HEARTS) {
 			cost = 1;
-		} else if ((theSuit==Constants.spades)&&(value==Constants.queen)) {
+		} else if ((theSuit==Constants.SPADES)&&(value==Constants.QUEEN)) {
 			cost = 13;
 		} 
 		
 	}
 	
-     /*  
-	public void paintComponent(Graphics g) {
-		this.setBounds(this.xLocation,this.yLocation,this.xSize+2, this.ySize+2);
-		//g.fillRoundRect(0, 0, this.xSize+2, this.ySize+2, 4, 4);
-		g.drawImage(this.getImage(), 1, 1, this.xSize, this.ySize, this);
-		System.out.println("Card "+this.cardName+" is being painted.");
-		
-    }
-    */
-	
+	public boolean isSelectedForTrade() {
+		return selectedForTrade;
+	}
+
+	public void setSelectedForTrade(boolean selectedForTrade) {
+		this.selectedForTrade = selectedForTrade;
+	}
+
 	public String getName() {
+		return this.cardName;
+	}
+	
+	public String toString() {
 		return this.cardName;
 	}
 	
